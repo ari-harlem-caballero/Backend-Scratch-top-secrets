@@ -8,7 +8,6 @@
 You’ve been hired by the Department of Defense to build a new service for their intranet: an API for storing top secret, confidential information. Your first task is to build an API and database schema for storing user emails & (hashed) passwords, as well as endpoints for creating and listing notes that can only be accessed by authenticated users. No UI is required; everything can be done via an API.
 
 ### `Secret` Model:
-**field	type**
 |  **field**  |  **type**  |
 |---|---|
 | `id` | bigint (generated) |

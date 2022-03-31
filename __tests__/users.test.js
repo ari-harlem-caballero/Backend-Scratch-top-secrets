@@ -33,4 +33,24 @@ describe('auth-api routes', () => {
 
     expect(res.body).toEqual(user);
   });
+
+  it('should sign out a user with DELETE sessions', async () => {
+    let user = await UserService.create({
+      username: 'ariIsBest',
+      password: 'suckanegg'
+    });
+
+    user = await UserService.signIn({
+      username: 'ariIsBest',
+      password: 'suckanegg'
+    });
+
+    const res = await request(app)
+      .delete('/api/v1/users/sessions')
+      .send(user);
+
+    expect(res.body).toEqual({
+      message: 'Successfully logged out',
+    });
+  });
 });

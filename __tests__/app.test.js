@@ -19,4 +19,8 @@ describe('auth-api routes', () => {
 
     expect(res.body).toEqual({ id: expect.any(String), username: 'ariIsBest' });
   });
+
+  it('should sign in a user with POST sessions', async () => {
+    
+  });
 });

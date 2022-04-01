@@ -34,4 +34,40 @@ describe('auth-api routes', () => {
       status: 401,
     });
   });
+
+  it('should allow signed in user to create secret', async () => {
+    const agent = request.agent(app);
+
+    const user = {
+      username: 'ariIsBest',
+      password: 'suckanegg'
+    };
+
+    await UserService.signIn(user);
+
+    const expected = {
+      id: expect.any(String),
+      title: 'Super Secret Secrets by Tina Belcher',
+      description: 'butts',
+      createdAt: expect.any(String)
+    };
+
+    let res = await agent
+      .get('/api/v1/secrets');
+
+    expect(res.body).toEqual({
+      message: 'Must be signed in to create a secret',
+      status: 401,
+    });
+
+    await agent
+      .post('/api/v1/users/sessions')
+      .send(user);
+
+    res = await agent
+      .post('/api/v1/secrets')
+      .send(expected);
+
+    expect(res.body).toEqual(expected);
+  });
 });

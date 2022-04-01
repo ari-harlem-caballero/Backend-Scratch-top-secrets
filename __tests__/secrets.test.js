@@ -22,7 +22,7 @@ describe('auth-api routes', () => {
     });
 
     const res = await agent
-      .post
+      .post('/api/v1/secrets')
       .send({
         id: expect.any(String),
         title: 'Super Secret Secrets by Tina Belcher',

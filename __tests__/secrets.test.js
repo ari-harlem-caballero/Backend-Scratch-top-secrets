@@ -4,7 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/UserService');
 
-describe('auth-api routes', () => {
+describe('secrets routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -38,36 +38,31 @@ describe('auth-api routes', () => {
   it('should allow signed in user to create secret', async () => {
     const agent = request.agent(app);
 
-    const user = {
+    await UserService.create({
       username: 'ariIsBest',
       password: 'suckanegg'
-    };
-
-    await UserService.signIn(user);
-
-    const expected = {
-      id: expect.any(String),
-      title: 'Super Secret Secrets by Tina Belcher',
-      description: 'butts',
-      createdAt: expect.any(String)
-    };
-
-    let res = await agent
-      .get('/api/v1/secrets');
-
-    expect(res.body).toEqual({
-      message: 'Must be signed in to create a secret',
-      status: 401,
     });
 
     await agent
       .post('/api/v1/users/sessions')
-      .send(user);
+      .send({
+        username: 'ariIsBest',
+        password: 'suckanegg'
+      });
 
-    res = await agent
+    const expected = {
+      title: 'Super Secret Secrets by Tina Belcher',
+      description: 'butts'
+    };
+
+    const res = await agent
       .post('/api/v1/secrets')
       .send(expected);
 
-    expect(res.body).toEqual(expected);
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      createdAt: expect.any(String),
+      ...expected
+    });
   });
 });
